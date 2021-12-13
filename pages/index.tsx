@@ -120,6 +120,7 @@ const Home: NextPage = ({
         >
           Add it !
         </button>
+        <h1>Hello World</h1>
       </form>
     </div>
   );
