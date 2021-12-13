@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import axios from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
 import type {
@@ -78,6 +78,21 @@ const Home: NextPage = ({
     [handleLoadData, reset]
   );
 
+  const handleDeleteData = useCallback(
+    ({ _id }: Omit<Records, "person_name" | "person_number">) => {
+      axios({
+        method: "delete",
+        url: `https://secret-badlands-96838.herokuapp.com/${_id}`,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+        .then(() => handleLoadData())
+        .catch((error) => console.log(error.message));
+    },
+    [handleLoadData]
+  );
+
   const onSubmit: SubmitHandler<Records> = useCallback(
     (data) => {
       handleAddData(data);
@@ -95,6 +110,12 @@ const Home: NextPage = ({
             <div className="flex items-center">
               <p>Name: {item.person_name}</p>
               <p className="ml-3">Number: {item.person_number}</p>
+              <button
+                className="bg-slate-600 px-3 py-2 ml-4 rounded text-white "
+                onClick={() => handleDeleteData(item)}
+              >
+                Delete this data
+              </button>
             </div>
           </div>
         );
